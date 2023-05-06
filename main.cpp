@@ -123,7 +123,7 @@ public:
 		capacity_ = new_capacity;
 	}
 
-	void insert_boll(size_t index, bool a)
+	void insert_bool(size_t index, bool a)
 	{
 		size_t n = 1;
 		size_t byteIndex = index / 8;
@@ -276,19 +276,17 @@ int main()
 
 	bool u = true;
 
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
-	F.insert_boll(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
+	F.insert_bool(16, u);
 
 
 	for (size_t i = 0; i < F.size() * 8; i++)
