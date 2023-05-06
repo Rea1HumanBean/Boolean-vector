@@ -18,7 +18,7 @@ class vector<bool>
 	size_t size_;
 
 	template<typename M>
-	void recize(M& A)
+	void resize(M& A)
 	{
 		size_t n = 1;
 		size_t dimension = size_ + sizeof(A);
@@ -41,13 +41,13 @@ class vector<bool>
 	}
 
 public:
-	vector(): size_(0), capacity_(0), B_vector(nullptr){}
+	vector() : size_(0), capacity_(0), B_vector(nullptr) {}
 
 	template <typename M>
 	void push_back(M& a)
 	{
 		size_t started = size_;
-		recize(a);
+		resize(a);
 		size_t value = 0;
 
 		if (sizeof(a) == 1) {
@@ -62,7 +62,7 @@ public:
 			}
 		}
 	}
-	
+
 	bool operator[](size_t index) const {
 		size_t bytePos = index / 8;
 		size_t bitPos = index % 8;
@@ -79,48 +79,19 @@ public:
 
 	void print() {
 		for (size_t i = 0; i < size_; i++)
-			std::cout << (int)B_vector[i]<<' ';
+			std::cout << (int)B_vector[i] << ' ';
 		std::cout << std::endl;
 	}
 
 	template<typename M>
 	void insert(size_t index, M& a)
 	{
-		size_t n = 1;
-		size_t new_capacity = capacity_;
-
-		if (index + sizeof(a) > capacity_)	{
-			while (pow(2, n) < index)
-				n++;
-
-			new_capacity = pow(2, n + 1);
-			size_ = index;
-			recize(a);
+		bool broadcast;
+		for (size_t i = 0; i < sizeof(a) * 8; i++)
+		{
+			broadcast = a & (1 << i);
+			insert_bool(index, broadcast);
 		}
-
-		unsigned char* Bubble = new unsigned char[new_capacity];
-
-		for (size_t i = 0; i < size_; i++)	{
-			if (i < index)
-				Bubble[i] = B_vector[i];
-
-			if (i == index)	{
-				if (sizeof(a) == 1) {
-					Bubble[index] = a;
-				}
-				else if (1 < sizeof(a)) {
-					size_t value = 0;
-					while (value < sizeof(a))
-					{
-						Bubble[index + value] = ((a >> ((value) * 8)) & 0xFF);
-						value++;
-					}
-				}
-			}
-		}
-		delete[] B_vector;
-		B_vector = Bubble;
-		capacity_ = new_capacity;
 	}
 
 	void insert_bool(size_t index, bool a)
@@ -130,11 +101,11 @@ public:
 		size_t bitIndex = index % 8;
 		size_t new_capacity = capacity_;
 
-		if (capacity_  < byteIndex) {
+		if (capacity_ < byteIndex) {
 			while (pow(2, n) < byteIndex)
 				n++;
 			new_capacity = pow(2, n + 1);
-			recize(a);
+			resize(a);
 		}
 
 		unsigned char* Bubble = new unsigned char[new_capacity];
@@ -164,7 +135,7 @@ public:
 				Bubble[i] = mask_0;
 			}
 			else {
-				if (B_vector[i] == 0 && lastIndex == false)	{
+				if (B_vector[i] == 0 && lastIndex == false) {
 					Bubble[i] = 0;
 				}
 
@@ -193,10 +164,10 @@ public:
 		unsigned char* Bubble = new unsigned char[size_ - 1];
 
 		for (size_t i = 0; i < size_ - 1; i++) {
-			if (i < index)	{
+			if (i < index) {
 				Bubble[i] = B_vector[i];
 			}
-			else 
+			else
 				Bubble[i] = B_vector[i + 1];
 		}
 		delete[] B_vector;
@@ -211,7 +182,7 @@ public:
 		size_t bitIndex = index % 8;
 		unsigned char* Bubble = new unsigned char[size_];
 
-		for (size_t i = 0; i < size_; i++){
+		for (size_t i = 0; i < size_; i++) {
 			bool lastIndex = false;
 
 			if (i < size_ - 1)
@@ -220,7 +191,7 @@ public:
 			if (i < byteIndex)
 				Bubble[i] = B_vector[i];
 
-			else if ( i == byteIndex) {
+			else if (i == byteIndex) {
 				unsigned char mask_0 = 0xFF;
 				unsigned char mask_1 = (mask_0 >> (8 - bitIndex) & B_vector[i]);
 				unsigned char mask_2 = (mask_0 >> 1);
@@ -279,16 +250,12 @@ int main()
 	F.insert_bool(16, u);
 	F.insert_bool(16, u);
 	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
-	F.insert_bool(16, u);
+	F.print();
 
 
+	char X = 40;
+	F.insert(8, X);
+	F.print();
 	for (size_t i = 0; i < F.size() * 8; i++)
 	{
 		if (i % 8 == 0)
@@ -310,5 +277,5 @@ int main()
 		std::cout << F[i];
 	}
 	std::cout << std::endl;
-
+	F.print();
 };
