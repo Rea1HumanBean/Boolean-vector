@@ -204,10 +204,21 @@ public:
 
 	void erase(size_t index)
 	{
+		
 		size_t n = 1;
 		size_t byteIndex = index / 8;
 		size_t bitIndex = index % 8;
 
+		try {
+			if (index > size_) {
+				throw std::out_of_range("Error: out of range");
+			}
+
+		}
+		catch (const std::out_of_range& e) {
+			std::cerr << "Error: out of range" << '\n';
+			exit(1);
+		}
 		size_t size = size_ / 8;
 		if (size_ % 8)
 			size++;
@@ -280,8 +291,6 @@ int main()
 
 	F.print();
 
-	F.erase(0);
-	F.erase(0);
 	F.erase(0);
 
 	F.print();
